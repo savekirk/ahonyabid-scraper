@@ -35,23 +35,19 @@ defmodule ClosedAuction do
     |> String.to_integer(10)
   end
 
-  @doc """
-  Convert auctions to list of %Auction{} structs
-  """
+  ## Convert auctions to list of %Auction{} structs
   defp convert_to_list_of_struct(list) do
     list
     |> Enum.map(&convert_to_struct/1)
   end
 
-  @doc """
-  Convert extracted auction to %Auction{} struct
-  """
+  ## Convert extracted auction to %Auction{} struct
   defp convert_to_struct(auction) do
     case auction do
       [{_,_,[name]}, {_,_,[m_price]}, {_,_,_}, {_,_,[sold]},{_,_,[winner]}]
         -> %Auction{product: name,
-                    market_price: m_price |> strip_ghc,
-                    sold_at: sold |> strip_ghc |> bid_to_cedis,
+                    market_price: m_price |> strip_ghc |> Float.to_string(decimals: 2),
+                    sold_at: sold |> strip_ghc |> bid_to_cedis |> Float.to_string(decimals: 2),
                     winner: winner}
     end
   end
@@ -71,17 +67,20 @@ defmodule ClosedAuction do
    705.5
   """
   def bid_to_cedis(bid) do
-    bid * 100 * 0.50 |> Float.round(2)
+    bid * 100 * 0.50
   end
 
   defp strip_ghc(money) do
     [bid] = money |> String.split(" ") |> Enum.take(-1)
-    String.to_float(bid) |> Float.round(2)
+    String.to_float(bid)
   end
 
-  @doc """
-  Extract the url for fetching all the closed auctions
-  """
+  def format_float(number) do
+    [value] = :io_lib.format("~.2f", [number])
+    value
+  end
+
+  ## Extract the url for fetching all the closed auctions
   defp get_full_url(html) do
     [[{_, [{_, url}], _}]] = parse_limit(html)
     @ahonyabid_url <> url
@@ -95,10 +94,8 @@ defmodule ClosedAuction do
     String.to_integer(limit)
   end
 
-  @doc """
-  Get the last element that controls the number of auctions displayed
-  per page
-  """
+  ## Get the last element that controls the number of auctions displayed
+  ## per page
   defp parse_limit(html) do
     Floki.find(html, ".dropdown-menu li a")
     |> Enum.chunk(1)

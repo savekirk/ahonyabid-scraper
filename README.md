@@ -30,6 +30,7 @@ market | product              | sold_at | winner
 400.0  | Itel iNote Prime     | 774.5   | babsie          
 800.0  | Samsung ME86V 23 ... | 22.0    | amg             
 900.0  | LG G3 Stylus         | 2275.0  | pandorra   
+...
 
 ```
 

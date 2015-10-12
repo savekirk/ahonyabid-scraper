@@ -12,7 +12,7 @@ defmodule AhonyaBid.TableFormater do
     puts_in_columns          data_by_columns, format
   end
 
-  
+
   def split_into_columns(rows, headers) do
     for header <- headers do
       for row <- rows, do: printable(Map.get(row, String.to_atom(header)))
