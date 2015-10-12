@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # AhonyaScraper
 
 **TODO: Add description**
@@ -17,3 +18,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
         def application do
           [applications: [:ahonya_scraper]]
         end
+=======
+# ahonyabid-scraper
+A simple web scraping command line app that fetched data from www.ahonyabid.com and manipulate it
+>>>>>>> 371806f153d9e3d7e5949aed3223a1de44ac8e63
