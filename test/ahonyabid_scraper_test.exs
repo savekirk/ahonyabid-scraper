@@ -1,6 +1,6 @@
 defmodule AhonyaScraperTest do
   use ExUnit.Case
-  doctest AhonyaScraper
+  doctest AhonyaBidScraper
 
   def html_data do
     """
