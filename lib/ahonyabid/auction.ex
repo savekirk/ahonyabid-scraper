@@ -1,3 +1,3 @@
 defmodule Auction do
-  defstruct product: "", market_price: "", sold_at: "", winner: "" 
+  defstruct product: nil, market_price: nil, sold_at: nil, winner: nil
 end
