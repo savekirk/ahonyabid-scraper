@@ -56,7 +56,7 @@ defmodule ClosedAuction do
   Get highest auction
   """
   def highest_auction(html) do
-    get_auctions(html) |> Enum.max_by(fn auc -> auc.sold_at end)
+    get_auctions(html) |> Enum.max_by(fn auc -> auc.sold_at |> String.to_float end)
   end
 
   @doc """
