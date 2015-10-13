@@ -23,12 +23,12 @@ defmodule AhonyaScraperTest do
   end
 
   test "Auctions get converted to Auction structs" do
-    assert ClosedAuction.get_auctions(html_data) |> Enum.take(1) == [%Auction{market_price: 400.0,
-             product: "Itel iNote Prime", sold_at: 705.5, winner: "odasani"}]
+    assert ClosedAuction.get_auctions(html_data) |> Enum.take(1) == [%Auction{market_price: "400.00",
+             product: "Itel iNote Prime", sold_at: "705.50", winner: "odasani"}]
   end
 
   test "Highest auction" do
-    assert ClosedAuction.highest_auction(html_data) == %Auction{market_price: 4.0e3, product: "Apple iPhone 6s 16Gb",
-            sold_at: 14105.5, winner: "adwen233"}
+    assert ClosedAuction.highest_auction(html_data) == %Auction{market_price: "4000.00", product: "Apple iPhone 6s 16Gb",
+            sold_at: "14105.50", winner: "adwen233"}
   end
 end
