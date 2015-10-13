@@ -1,6 +1,6 @@
 defmodule ClosedAuction do
 
-  import AhonyaBid.TableFormater, only: [ print_table_for_columns: 2 ]
+  import AhonyaBid.TableFormater, only: [ print_table_columns: 2 ]
 
   @ahonyabid_url Application.get_env(:ahonyabid_scraper, :ahonyabid_url)
   @closed_auction_url @ahonyabid_url <> "/auction/closed/?limit=1000"
@@ -20,14 +20,14 @@ defmodule ClosedAuction do
     Floki.find(html, "#closedAuc")
     |> Floki.find(".col-sm-3 p")
     |> Enum.chunk(5)
-    |> convert_to_list_of_struct
+    |> to_struct_list
   end
 
   def format_auction(html) do
-    get_auctions(html) |> print_table_for_columns(["market_price", "product", "sold_at", "winner"])
+    get_auctions(html) |> print_table_columns(["market_price", "product", "sold_at", "winner"])
   end
 
-  defp get_total_page(html) do
+  def get_total_page(html) do
     Floki.find(html, ".pagination li a")
     |> Floki.attribute("href")
     |> Enum.at(-2)
@@ -36,13 +36,13 @@ defmodule ClosedAuction do
   end
 
   ## Convert auctions to list of %Auction{} structs
-  defp convert_to_list_of_struct(list) do
-    list
-    |> Enum.map(&convert_to_struct/1)
+  defp to_struct_list(auctions) do
+    auctions
+    |> Enum.map(&auction_to_struct/1)
   end
 
   ## Convert extracted auction to %Auction{} struct
-  defp convert_to_struct(auction) do
+  defp auction_to_struct(auction) do
     case auction do
       [{_,_,[name]}, {_,_,[m_price]}, {_,_,_}, {_,_,[sold]},{_,_,[winner]}]
         -> %Auction{product: name,
@@ -81,7 +81,7 @@ defmodule ClosedAuction do
   end
 
   ## Extract the url for fetching all the closed auctions
-  defp get_full_url(html) do
+  def get_full_url(html) do
     [[{_, [{_, url}], _}]] = parse_limit(html)
     @ahonyabid_url <> url
   end
