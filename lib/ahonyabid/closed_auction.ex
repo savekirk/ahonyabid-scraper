@@ -24,7 +24,7 @@ defmodule ClosedAuction do
   end
 
   def format_auction(html) do
-    get_auctions(html) |> print_table_columns(["market_price", "product", "sold_at", "winner"])
+    get_auctions(html) |> print_table_columns(["market_price", "product", "sold_at", "profit_loss", "winner"])
   end
 
   def get_total_page(html) do
@@ -48,6 +48,7 @@ defmodule ClosedAuction do
         -> %Auction{product: name,
                     market_price: m_price |> strip_ghc |> Float.to_string(decimals: 2),
                     sold_at: sold |> strip_ghc |> bid_to_cedis |> Float.to_string(decimals: 2),
+                    profit_loss: profit_or_loss(m_price, sold) |> Float.to_string(decimals: 2),
                     winner: winner}
     end
   end
@@ -75,10 +76,11 @@ defmodule ClosedAuction do
     String.to_float(bid)
   end
 
-  def format_float(number) do
-    [value] = :io_lib.format("~.2f", [number])
-    value
+  ## Calculate profit or loss
+  defp profit_or_loss(market_price, sold_at) do
+    (sold_at |> strip_ghc |> bid_to_cedis) - (market_price |> strip_ghc)
   end
+
 
   ## Extract the url for fetching all the closed auctions
   def get_full_url(html) do
